@@ -123,7 +123,11 @@ def initMenu():
             print("There was an error while deleting the user.")
 
     elif (sel == "3"):
-        print(resetUserPassword())
+        if (resetUserPassword() == 204):
+                print("Done!")
+                initMenu()
+        else:
+            print("There was an error while deleting the user.")
 
     elif (sel == "0"):
         try:
