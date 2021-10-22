@@ -12,7 +12,7 @@ https://www.python.org/downloads/
 
 ### 1. Cloning the git repo
 
-Run the following command on the host you would like to run kc-manager on: \
+Run the following command on the host you would like to run kc-manager on: 
 
 ```git clone https://github.com/aehliglucas/kc-manager.git```
 
@@ -25,9 +25,9 @@ To create it you only have to rename the ".env-sample"-file to ".env" and edit i
 
 ### 3. Installing dependencies
 
-If you have python installed you just have to run \
+If you have python installed you just have to run 
 
-```python -m pip install -r requirements.txt``` \
+```python -m pip install -r requirements.txt``` 
 
 to install all needed dependencies.
 
