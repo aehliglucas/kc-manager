@@ -1,4 +1,4 @@
-## kc-manager
+# kc-manager
 A lightweight console based python app to manage Keycloak without having a web interface on hand.
 
 ## How to use?
