@@ -1,5 +1,5 @@
 ## kc-manager
-A lightweight console based python app to manage Keycloak without having a web interface handy.
+A lightweight console based python app to manage Keycloak without having a web interface on hand.
 
 ## How to use?
 
@@ -12,7 +12,7 @@ https://www.python.org/downloads/
 
 ### 1. Cloning the git repo
 
-Run the following command on the host you would like to run kc-manager on: 
+Run the following command on the host you would like to run kc-manager on: \
 ```git clone https://github.com/aehliglucas/kc-manager.git```
 
 
