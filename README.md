@@ -24,8 +24,8 @@ To create it you only have to rename the ".env-sample"-file to ".env" and edit i
 
 ### 3. Installing dependencies
 
-If you have python installed you just have to run
-```python -m pip install -r requirements.txt```
+If you have python installed you just have to run \
+```python -m pip install -r requirements.txt``` \
 to install all needed dependencies.
 
 
