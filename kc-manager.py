@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 import requests
 import json
 import getpass
+from consolemenu import *
+from consolemenu.items import *
+import time
 
 load_dotenv()
 
@@ -37,6 +40,16 @@ def getIdByUsername(username):
 
     return json.loads(response.text)[0]["id"]
 
+
+def checkConnection():
+    try:
+        getAccessToken()
+        print("\nConnected to Keycloak successfully! Returning to menu in 5 seconds...")
+    except:
+        print("\nThere was an error connecting to Keycloak! Returning to menu in 5 seconds...")
+    time.sleep(5)
+
+# Users
 
 def createUser(has_temporary_password = True):
     user = input('Enter the desired username: ')
@@ -81,61 +94,32 @@ def resetUserPassword():
     return change_response.status_code
 
 
+# Menu
+
 def initMenu():
-    print("\nPlease choose an option: \n")
-    while True:
-        sel = input("(1) Create a new user\n(2) Delete an existing user\n(3) Set user back to starter password\n(0) Test connection to keycloak\n(q) Quit\n\n > ")
-        if (sel not in {"1", "2", "3", "0", "q"}):
-            print("Please enter a valid option!\n")
-        else:
-            break
+    # Menu initialization
+    menu = ConsoleMenu("Home", "Please choose a management option:")
+    sub_users = ConsoleMenu("User Management")
+    #sub_groups = ConsoleMenu("Group Management")
+    
+    # Submenu Triggers
+    sub_call_users = SubmenuItem("Users", sub_users, menu=menu)
+    #sub_call_groups = SubmenuItem("Groups", sub_groups, menu=menu)
 
-    if(sel == "q"):
-        exit()
+    # User Items
+    func_user_create = FunctionItem("Create a new User", createUser, menu=sub_call_users)
+    func_user_delete = FunctionItem("Delete a User", deleteUser, menu=sub_call_users)
+    func_user_resetpw = FunctionItem("Reset Password", resetUserPassword, menu=sub_call_users)
+    sub_users.append_item(func_user_create)
+    sub_users.append_item(func_user_delete)
+    sub_users.append_item(func_user_resetpw)
 
-    elif (sel == "1"):
-        while True:
-            r = input("\nWould you like to set a temporary starter password? (y/n) ")
-            if (r not in {"y", "n"}):
-                print("Please enter a valid option!")
-            else:
-                break
 
-        if (r == "y"):
-            if (createUser() == 201):
-                print("Done!")
-                initMenu()
-            else:
-                print("There was an error while creating a new user.")
-        elif (r == "n"):
-            if (createUser(False) == 201):
-                print("Done!")
-                initMenu()
-            else:
-                print("There was an error while creating a new user.")
-
-    elif (sel == "2"):
-        if (deleteUser() == 204):
-                print("Done!")
-                initMenu()
-        else:
-            print("There was an error while deleting the user.")
-
-    elif (sel == "3"):
-        if (resetUserPassword() == 204):
-                print("Done!")
-                initMenu()
-        else:
-            print("There was an error while deleting the user.")
-
-    elif (sel == "0"):
-        try:
-            getAccessToken()
-            print("\nConnected to Keycloak successfully!")
-        except:
-            print("\nThere was an error connecting to Keycloak!")
-        finally:
-            initMenu()
+    func_connect_check = FunctionItem("Check connection to keycloak", checkConnection, menu=menu)
+    menu.append_item(sub_call_users)
+    #menu.append_item(sub_call_groups)
+    menu.append_item(func_connect_check)
+    menu.show()
 
 print(" _                   _             _                                                       \n| |                 | |           | |                                                      \n| | _____ _   _  ___| | ___   __ _| | ________ _ __ ___   __ _ _ __   __ _  __ _  ___ _ __ \n| |/ / _ \ | | |/ __| |/ _ \ / _` | |/ /______| '_ ` _ \ / _` | '_ \ / _` |/ _` |/ _ \ '__|\n|   <  __/ |_| | (__| | (_) | (_| |   <       | | | | | | (_| | | | | (_| | (_| |  __/ |   \n|_|\_\___|\__, |\___|_|\___/ \__,_|_|\_\      |_| |_| |_|\__,_|_| |_|\__,_|\__, |\___|_|   \n           __/ |                                                            __/ |          \n          |___/                                                            |___/           ")
 initMenu()
