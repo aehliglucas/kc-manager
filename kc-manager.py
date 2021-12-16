@@ -34,11 +34,13 @@ def getAccessToken():
     return json.loads(response.text)['access_token']
 
 
-def getIdByUsername(username):
+def getIdByUsername():
+    username = input("Username: ")
     headers = {'Authorization': 'Bearer ' + getAccessToken()}
     response = requests.get(rooturl + "/auth/admin/realms/" + realm + "/users?username=" + username, headers=headers)
 
-    return json.loads(response.text)[0]["id"]
+    print("Found ID: " + json.loads(response.text)[0]["id"] + "\nReturning to menu in 5 seconds...")
+    time.sleep(5)
 
 
 def checkConnection():
@@ -110,9 +112,11 @@ def initMenu():
     func_user_create = FunctionItem("Create a new User", createUser, menu=sub_call_users)
     func_user_delete = FunctionItem("Delete a User", deleteUser, menu=sub_call_users)
     func_user_resetpw = FunctionItem("Reset Password", resetUserPassword, menu=sub_call_users)
+    func_user_getIdByName = FunctionItem("Get UserID by username", getIdByUsername, menu=sub_call_users)
     sub_users.append_item(func_user_create)
     sub_users.append_item(func_user_delete)
     sub_users.append_item(func_user_resetpw)
+    sub_users.append_item(func_user_getIdByName)
 
 
     func_connect_check = FunctionItem("Check connection to keycloak", checkConnection, menu=menu)
