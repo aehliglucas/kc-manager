@@ -34,22 +34,23 @@ def getAccessToken():
     return json.loads(response.text)['access_token']
 
 
-def getIdByUsername():
-    username = input("Username: ")
+def getIdByUsername(username):
     headers = {'Authorization': 'Bearer ' + getAccessToken()}
     response = requests.get(rooturl + "/auth/admin/realms/" + realm + "/users?username=" + username, headers=headers)
 
-    print("Found ID: " + json.loads(response.text)[0]["id"] + "\nReturning to menu in 5 seconds...")
-    time.sleep(5)
+    return json.loads(response.text)[0]["id"]
 
 
 def checkConnection():
     try:
         getAccessToken()
-        print("\nConnected to Keycloak successfully! Returning to menu in 5 seconds...")
+        print("\nConnected to Keycloak successfully! Press q to return to menu")
     except:
-        print("\nThere was an error connecting to Keycloak! Returning to menu in 5 seconds...")
-    time.sleep(5)
+        print("\nThere was an error connecting to Keycloak! Press q to return to menu")
+    
+    while (input() != "q"):
+        print("Only 'q' is an option!")
+    return
 
 # Users
 
@@ -73,7 +74,14 @@ def createUser(has_temporary_password = True):
     print("Creating user...")
     response = requests.post(rooturl + '/auth/admin/realms/' + realm + '/users', data=data, headers=headers)
 
-    return response.status_code
+    if (response.status_code == 201):
+        print("User created successfully!\nPress q to return to menu")
+    else:
+        print("There was an error in user creation! Keycloak responded with " + response.status_code + "\nPress q to return to menu")
+    
+    while (input() != "q"):
+        print("Only 'q' is an option!")
+    return
 
 
 def deleteUser():
@@ -81,7 +89,15 @@ def deleteUser():
     headers = {'Authorization': 'Bearer ' + getAccessToken()}
     delete_response = requests.delete(rooturl + "/auth/admin/realms/" + realm + "/users/" + getIdByUsername(user), headers=headers)
     
-    return delete_response.status_code
+
+    if (delete_response.status_code == 204):
+        print("User deleted successfully!\nPress q to return to menu")
+    else:
+        print("There was an error in user deletion! Keycloak responded with " + delete_response.status_code + "\nPress q to return to menu")
+
+    while (input() != "q"):
+        print("Only 'q' is an option!")
+    return
 
 
 def resetUserPassword():
@@ -91,9 +107,16 @@ def resetUserPassword():
         'Authorization': 'Bearer ' + getAccessToken()
     }
     data = '{"type":"password","temporary":"true","value":"' + starter_password + '"}'
-    change_response = requests.put(rooturl + "/auth/admin/realms/" + realm + "/users/" + getIdByUsername(user) + "/reset-password", headers=headers, data=data)
+    change_response = requests.put(rooturl + "/auth/admin/realms/" + realm + "/users/" + getIdByUsername(user) + "/reset-password", headers=headers, data=data) 
 
-    return change_response.status_code
+    if (change_response.status_code == 204):
+        print("Password was reset successfully!\nPress q to return to menu")
+    else:
+        print("There was an error in resetting the password! Keycloak responded with " + change_response.status_code + "\nPress q to return to menu")
+
+    while (input() != "q"):
+        print("Only 'q' is an option!")
+    return
 
 
 # Menu
@@ -112,18 +135,18 @@ def initMenu():
     func_user_create = FunctionItem("Create a new User", createUser, menu=sub_call_users)
     func_user_delete = FunctionItem("Delete a User", deleteUser, menu=sub_call_users)
     func_user_resetpw = FunctionItem("Reset Password", resetUserPassword, menu=sub_call_users)
-    func_user_getIdByName = FunctionItem("Get UserID by username", getIdByUsername, menu=sub_call_users)
     sub_users.append_item(func_user_create)
     sub_users.append_item(func_user_delete)
     sub_users.append_item(func_user_resetpw)
-    sub_users.append_item(func_user_getIdByName)
 
-
+    # Menu building
     func_connect_check = FunctionItem("Check connection to keycloak", checkConnection, menu=menu)
     menu.append_item(sub_call_users)
     #menu.append_item(sub_call_groups)
     menu.append_item(func_connect_check)
     menu.show()
 
+clear_terminal()
 print(" _                   _             _                                                       \n| |                 | |           | |                                                      \n| | _____ _   _  ___| | ___   __ _| | ________ _ __ ___   __ _ _ __   __ _  __ _  ___ _ __ \n| |/ / _ \ | | |/ __| |/ _ \ / _` | |/ /______| '_ ` _ \ / _` | '_ \ / _` |/ _` |/ _ \ '__|\n|   <  __/ |_| | (__| | (_) | (_| |   <       | | | | | | (_| | | | | (_| | (_| |  __/ |   \n|_|\_\___|\__, |\___|_|\___/ \__,_|_|\_\      |_| |_| |_|\__,_|_| |_|\__,_|\__, |\___|_|   \n           __/ |                                                            __/ |          \n          |___/                                                            |___/           ")
+time.sleep(3)
 initMenu()
