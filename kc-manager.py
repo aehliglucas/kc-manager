@@ -15,6 +15,8 @@ starter_password = os.getenv('STARTER_PASSWORD')
 host = rooturl.split("//")[1]
 port = host.split(":")[1]
 input_data = []
+connect_fail_continue = os.getenv('CONTINUE_ON_CONNECTFAIL')
+print(connect_fail_continue)
 
 def ping():
     print("\nChecking TCP connection to " + host + " .... ", end='')
@@ -31,8 +33,11 @@ def startup():
         print("[ " + '\033[0;32m' + "OK" + '\033[0m' + " ]")
     else:
         print("[ " + '\033[1;31m' + "FAIL" + '\033[0m' + " ]")
-        print("Failed to reach " + host + " on port " + port + "/tcp. Please check your .env-settings and try again.")
-        exit()
+        if(connect_fail_continue == "False"):
+            print("Failed to reach " + host + " on port " + port + "/tcp. Please check your settings and try again.")
+            exit()
+        else:
+            print("Failed to reach " + host + " on port " + port + "/tcp. You set CONTINUE_ON_CONNECTFAIL to True, so execution will continue as if nothing happened.")
     time.sleep(1)
     input_data.append(input("What realm would you like to work on? \n > "))
     input_data.append(input("\nWhat's your Keycloak username? \n > "))
