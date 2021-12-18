@@ -1,5 +1,4 @@
 import os
-import subprocess
 from dotenv import load_dotenv
 import requests
 import json
@@ -11,13 +10,11 @@ import socket
 
 load_dotenv()
 
-username = os.getenv('KEYCLOAK_USERNAME')
-password = os.getenv('KEYCLOAK_PASSWORD')
 rooturl = os.getenv('KEYCLOAK_ROOTURL')
-realm = os.getenv('KEYCLOAK_REALM')
 starter_password = os.getenv('STARTER_PASSWORD')
 host = rooturl.split("//")[1]
 port = host.split(":")[1]
+input_data = []
 
 def ping():
     print("\nChecking TCP connection to " + host + " .... ", end='')
@@ -37,8 +34,10 @@ def startup():
         print("Failed to reach " + host + " on port " + port + "/tcp. Please check your .env-settings and try again.")
         exit()
     time.sleep(1)
-    realm = input("What realm would you like to work on? \n > ")
-    #initMenu()
+    input_data.append(input("What realm would you like to work on? \n > "))
+    input_data.append(input("\nWhat's your Keycloak username? \n > "))
+    input_data.append(getpass.getpass("\nPassword: \n > "))
+    return input_data
 
 def getAccessToken():
     # Grab access token from Keycloak
@@ -196,3 +195,7 @@ def initMenu():
     menu.show()
 
 startup()
+realm = input_data[0]
+username = input_data[1]
+password = input_data[2]
+initMenu()
