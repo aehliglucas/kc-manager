@@ -5,7 +5,6 @@ import json
 import getpass
 from consolemenu import *
 from consolemenu.items import *
-import time
 import socket
 
 load_dotenv()
@@ -37,7 +36,6 @@ def startup():
             exit()
         else:
             print("Failed to reach " + host + " on port " + port + "/tcp. You set CONTINUE_ON_CONNECTFAIL to True, so execution will continue as if nothing happened.")
-    time.sleep(1)
     input_data.append(input("What realm would you like to work on? \n > "))
     input_data.append(input("\nWhat's your Keycloak username? \n > "))
     input_data.append(getpass.getpass("\nPassword: \n > "))
