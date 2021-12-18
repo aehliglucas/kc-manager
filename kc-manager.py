@@ -76,7 +76,7 @@ def checkConnection():
     except:
         print("\nThere was an error connecting to Keycloak! Press q to return to menu")
     
-    while (input(">") != "q"):
+    while (input(" > ") != "q"):
         print("Only 'q' is an option!")
     return
 
@@ -107,7 +107,7 @@ def createUser(has_temporary_password = True):
     else:
         print("There was an error in user creation! Keycloak responded with " + response.text + "\nPress q to return to menu")
     
-    while (input(">") != "q"):
+    while (input(" > ") != "q"):
         print("Only 'q' is an option!")
     return
 
@@ -123,7 +123,7 @@ def deleteUser():
     else:
         print("There was an error in user deletion! Keycloak responded with " + delete_response.text + "\nPress q to return to menu")
 
-    while (input(">") != "q"):
+    while (input(" > ") != "q"):
         print("Only 'q' is an option!")
     return
 
@@ -142,7 +142,7 @@ def resetUserPassword():
     else:
         print("There was an error in resetting the password! Keycloak responded with " + change_response.text + "\nPress q to return to menu")
 
-    while (input(">") != "q"):
+    while (input(" > ") != "q"):
         print("Only 'q' is an option!")
     return
 
@@ -159,11 +159,11 @@ def getClients():
     if (show_response.status_code == 200):
         file = open('clients.json', 'w')
         file.write(json.dumps(json.loads(show_response.text), indent=4, sort_keys=True))
-        print("The client list has been printed to 'clients.txt' in the current folder.\nPress q to return to menu")
+        print("The client list has been printed to 'clients.json' in the current folder.\nPress q to return to menu")
     else:
         print("There was an error while requesting the client list! Keycloak responded with " + show_response.text + "\nPress q to return to menu")
 
-    while (input(">") != "q"):
+    while (input(" > ") != "q"):
         print("Only 'q' is an option!")
     return
 
