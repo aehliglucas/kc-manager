@@ -19,7 +19,7 @@ Run the following command on the host you would like to run kc-manager on:
 
 ### 2. Creating the .env
 
-The .env-file is used to set environmental variables like your Keycloak host, usernames and passwords.
+The .env-file is used to set several options for kc-manager.
 To create it you only have to rename the ".env-sample"-file to ".env" and edit it to match your settings.
 
 
