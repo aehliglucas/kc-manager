@@ -16,7 +16,6 @@ host = rooturl.split("//")[1]
 port = host.split(":")[1]
 input_data = []
 connect_fail_continue = os.getenv('CONTINUE_ON_CONNECTFAIL')
-print(connect_fail_continue)
 
 def ping():
     print("\nChecking TCP connection to " + host + " .... ", end='')
